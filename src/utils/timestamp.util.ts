@@ -60,23 +60,7 @@ export function extractTimestamps(text: string): number[] {
   let match: RegExpExecArray | null;
 
   while ((match = regex.exec(text)) !== null) {
-    const [, h_or_m, m_or_s, s] = match;
-    let totalSeconds: number;
-
-    if (s !== undefined) {
-      // HH:MM:SS 형식
-      totalSeconds =
-        (Number(h_or_m) * 3600) +
-        (Number(m_or_s) * 60) +
-        Number(s);
-    } else {
-      // MM:SS 형식
-      totalSeconds =
-        (Number(h_or_m) * 60) +
-        Number(m_or_s);
-    }
-
-    timestamps.push(totalSeconds);
+    timestamps.push(timestampToSeconds(match[0]));
   }
 
   return timestamps;
@@ -105,7 +89,7 @@ export function filterCommentsByTimestampRange(
   const max = targetSec + rangeSec;
 
   return comments.filter((thread) => {
-    const text = thread.snippet.topLevelComment.snippet.textDisplay;
+    const text = thread.snippet.topLevelComment.snippet.textOriginal;
     const timestamps = extractTimestamps(text);
     return timestamps.some((ts) => ts >= min && ts <= max);
   });
