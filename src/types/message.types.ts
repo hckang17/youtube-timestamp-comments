@@ -62,6 +62,7 @@ export interface GetVideoIdResponse {
 }
 
 export interface ErrorResponse {
+export interface ErrorResponse {
   type: MessageType.ERROR;
   error: string;
   code?: number;
