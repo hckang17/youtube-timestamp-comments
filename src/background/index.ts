@@ -4,9 +4,7 @@
 import { fetchCommentThreads, fetchReplies, YouTubeApiError } from '../services/youtube.service';
 import { getStorage } from '../utils/storage.util';
 import { STORAGE_KEY_API_KEY } from '../constants';
-import {
-  MessageType,
-} from '../types/message.types';
+import { MessageType } from '../types/message.types';
 import type {
   RequestMessage,
   FetchCommentsRequest,
@@ -42,9 +40,31 @@ async function handleMessage(
       break;
 
     case MessageType.GET_VIDEO_ID:
-      // Content Script에서 직접 처리하므로 Background에서는 미사용
+      // Popup → Content Script 직접 쿼리 방식으로 처리하므로
+      // Background에서는 포트 에러 방지를 위해 빈 응답만 반환
+      sendResponse({
+        type: MessageType.GET_VIDEO_ID,
+        payload: { videoId: null },
+      });
       break;
+
+    default:
+      sendResponse({
+        type: MessageType.ERROR,
+        error: 'Unknown message type.',
+      });
   }
+}
+
+// ── API 키 조회 헬퍼 ───────────────────────────────────────
+
+/**
+ * chrome.storage.local에서 API 키를 읽어 반환
+ * API 키가 없으면 null 반환
+ */
+async function getApiKey(): Promise<string | null> {
+  const apiKey = await getStorage(STORAGE_KEY_API_KEY);
+  return apiKey ?? null;
 }
 
 // ── FETCH_COMMENTS 처리 ────────────────────────────────────
@@ -54,7 +74,7 @@ async function handleFetchComments(
   sendResponse: (response: ResponseMessage) => void,
 ): Promise<void> {
   try {
-    const apiKey = await getStorage(STORAGE_KEY_API_KEY);
+    const apiKey = await getApiKey();
 
     if (!apiKey) {
       sendResponse({
@@ -87,7 +107,7 @@ async function handleFetchReplies(
   sendResponse: (response: ResponseMessage) => void,
 ): Promise<void> {
   try {
-    const apiKey = await getStorage(STORAGE_KEY_API_KEY);
+    const apiKey = await getApiKey();
 
     if (!apiKey) {
       sendResponse({

@@ -1,8 +1,9 @@
 // Content Script
-// YouTube 페이지에서 현재 영상의 videoId를 추출하여 Background에 전달한다.
+// YouTube 페이지에서 현재 영상의 videoId를 추출한다.
+// Popup이 chrome.tabs.sendMessage로 GET_VIDEO_ID를 요청하면 응답한다.
 
 import { MessageType } from '../types/message.types';
-import type { GetVideoIdResponse } from '../types/message.types';
+import type { GetVideoIdRequest, GetVideoIdResponse } from '../types/message.types';
 
 // ── videoId 추출 ───────────────────────────────────────────
 
@@ -15,25 +16,22 @@ function extractVideoId(): string | null {
   return url.searchParams.get('v');
 }
 
-// ── Background로 videoId 전달 ──────────────────────────────
+// ── Popup 요청 리스너 ──────────────────────────────────────
+// Popup이 chrome.tabs.sendMessage(tabId, { type: GET_VIDEO_ID })로 요청하면
+// 현재 videoId를 응답한다.
 
-function sendVideoId(videoId: string | null): void {
-  const response: GetVideoIdResponse = {
-    type: MessageType.GET_VIDEO_ID,
-    payload: { videoId },
-  };
-  chrome.runtime.sendMessage(response);
-}
-
-// ── 초기 실행 ──────────────────────────────────────────────
-
-sendVideoId(extractVideoId());
-
-// ── YouTube SPA 네비게이션 감지 ───────────────────────────
-// YouTube는 SPA 방식으로 동작하므로 페이지 이동 시 URL은 변경되지만
-// Content Script가 재실행되지 않는다.
-// 'yt-navigate-finish' 이벤트로 영상 전환을 감지하여 videoId를 재전송한다.
-
-window.addEventListener('yt-navigate-finish', () => {
-  sendVideoId(extractVideoId());
-});
+chrome.runtime.onMessage.addListener(
+  (
+    message: GetVideoIdRequest,
+    _sender: chrome.runtime.MessageSender,
+    sendResponse: (response: GetVideoIdResponse) => void,
+  ) => {
+    if (message.type === MessageType.GET_VIDEO_ID) {
+      sendResponse({
+        type: MessageType.GET_VIDEO_ID,
+        payload: { videoId: extractVideoId() },
+      });
+    }
+    // 동기 응답이므로 true 반환 불필요
+  },
+);
