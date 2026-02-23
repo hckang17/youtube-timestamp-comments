@@ -70,7 +70,7 @@ async function handleResponse<T>(
   errorMessages: Record<string, string>,
 ): Promise<T> {
   if (response.ok) {
-    return response.json() as Promise<T>;
+    return response.json();
   }
 
   // YouTube API 에러 응답 본문 파싱 시도
