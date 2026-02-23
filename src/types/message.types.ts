@@ -6,6 +6,7 @@ export enum MessageType {
   FETCH_COMMENTS = 'FETCH_COMMENTS',
   FETCH_REPLIES = 'FETCH_REPLIES',
   GET_VIDEO_ID = 'GET_VIDEO_ID',
+  ERROR = 'ERROR',
 }
 
 // ── 요청 타입 ──────────────────────────────────────────────
@@ -60,6 +61,7 @@ export interface GetVideoIdResponse {
 }
 
 export interface ErrorResponse {
+  type: MessageType.ERROR;
   error: string;
   code?: number;
 }
