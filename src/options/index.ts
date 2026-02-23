@@ -7,17 +7,29 @@ import { getStorage, setStorage } from '../utils/storage.util';
 import { STORAGE_KEY_API_KEY, STORAGE_KEY_THEME, THEME_DARK, THEME_LIGHT } from '../constants';
 import type { Language } from '../types/storage.types';
 
+// ── DOM 헬퍼 ───────────────────────────────────────────────
+
+/**
+ * getElementById 래퍼 — 요소가 없으면 초기화 시점에 즉시 throw
+ * HTML 구조 변경 시 런타임 에러를 빠르게 발견할 수 있다.
+ */
+function getElement<T extends HTMLElement>(id: string): T {
+  const el = document.getElementById(id);
+  if (!el) throw new Error(`Element with id '${id}' not found.`);
+  return el as T;
+}
+
 // ── DOM 참조 ───────────────────────────────────────────────
 
-const apiKeyInput    = document.getElementById('api-key')        as HTMLInputElement;
-const setupBtn       = document.getElementById('setup-btn')      as HTMLButtonElement;
-const visibilityBtn  = document.getElementById('visibility-btn') as HTMLButtonElement;
-const eyeIcon        = document.getElementById('eye-icon')       as HTMLSpanElement;
-const saveMessage    = document.getElementById('save-message')   as HTMLParagraphElement;
-const themeToggleBtn = document.getElementById('theme-toggle')   as HTMLButtonElement;
-const langBtn        = document.getElementById('lang-btn')       as HTMLButtonElement;
-const langMenu       = document.getElementById('lang-menu')      as HTMLDivElement;
-const langLabel      = document.getElementById('lang-label')     as HTMLSpanElement;
+const apiKeyInput    = getElement<HTMLInputElement>('api-key');
+const setupBtn       = getElement<HTMLButtonElement>('setup-btn');
+const visibilityBtn  = getElement<HTMLButtonElement>('visibility-btn');
+const eyeIcon        = getElement<HTMLSpanElement>('eye-icon');
+const saveMessage    = getElement<HTMLParagraphElement>('save-message');
+const themeToggleBtn = getElement<HTMLButtonElement>('theme-toggle');
+const langBtn        = getElement<HTMLButtonElement>('lang-btn');
+const langMenu       = getElement<HTMLDivElement>('lang-menu');
+const langLabel      = getElement<HTMLSpanElement>('lang-label');
 
 // ── 다크모드 ───────────────────────────────────────────────
 
@@ -43,10 +55,13 @@ function toggleVisibility(): void {
 
 // ── 저장 메시지 표시 ───────────────────────────────────────
 
+let saveMessageTimeoutId: number;
+
 function showSaveMessage(text: string, type: 'success' | 'error'): void {
+  clearTimeout(saveMessageTimeoutId);
   saveMessage.textContent = text;
   saveMessage.className = `save-message ${type}`;
-  setTimeout(() => {
+  saveMessageTimeoutId = window.setTimeout(() => {
     saveMessage.className = 'save-message hidden';
   }, 3000);
 }
@@ -93,7 +108,6 @@ function updateActiveLangItem(): void {
   document.querySelectorAll<HTMLAnchorElement>('.lang-item').forEach((el) => {
     el.classList.toggle('active', el.dataset.lang === current);
   });
-  // 헤더 언어 버튼 레이블 업데이트
   const langs = getSupportedLanguages();
   const found = langs.find((l) => l.code === current);
   if (found) langLabel.textContent = found.label;
@@ -101,30 +115,37 @@ function updateActiveLangItem(): void {
 
 // ── i18n 적용 ──────────────────────────────────────────────
 
-function applyI18n(): void {
-  // data-i18n 속성을 가진 요소 텍스트 교체
-  document.querySelectorAll<HTMLElement>('[data-i18n]').forEach((el) => {
-    const key = el.dataset.i18n ?? '';
-    const [section, k] = key.split('.') as [string, string];
+function applyI18nToElements(
+  selector: string,
+  apply: (el: HTMLElement, text: string) => void,
+  dataKey: string,
+): void {
+  document.querySelectorAll<HTMLElement>(selector).forEach((el) => {
+    const key = (el.dataset[dataKey] ?? '');
+    const [section, k] = key.split('.');
+    if (!section || !k) return;
     try {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      el.textContent = t(section as any, k as any);
+      apply(el, t(section as any, k as any));
     } catch {
       // 키가 없으면 그대로 유지
     }
   });
+}
 
-  // data-i18n-placeholder 속성을 가진 input placeholder 교체
-  document.querySelectorAll<HTMLInputElement>('[data-i18n-placeholder]').forEach((el) => {
-    const key = el.dataset.i18nPlaceholder ?? '';
-    const [section, k] = key.split('.') as [string, string];
-    try {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      el.placeholder = t(section as any, k as any);
-    } catch {
-      // 키가 없으면 그대로 유지
-    }
-  });
+function applyI18n(): void {
+  // html lang 속성 업데이트 (스크린 리더 접근성)
+  document.documentElement.lang = getCurrentLanguage();
+
+  // data-i18n: textContent 교체
+  applyI18nToElements('[data-i18n]', (el, text) => {
+    el.textContent = text;
+  }, 'i18n');
+
+  // data-i18n-placeholder: input placeholder 교체
+  applyI18nToElements('[data-i18n-placeholder]', (el, text) => {
+    if (el instanceof HTMLInputElement) el.placeholder = text;
+  }, 'i18nPlaceholder');
 }
 
 // ── 저장된 API 키 로드 ─────────────────────────────────────
@@ -137,25 +158,19 @@ async function loadApiKey(): Promise<void> {
 // ── 이벤트 등록 ───────────────────────────────────────────
 
 function bindEvents(): void {
-  // API 키 저장
   setupBtn.addEventListener('click', () => { void saveApiKey(); });
   apiKeyInput.addEventListener('keydown', (e) => {
     if (e.key === 'Enter') void saveApiKey();
   });
 
-  // 비밀번호 가시성
   visibilityBtn.addEventListener('click', toggleVisibility);
-
-  // 다크모드
   themeToggleBtn.addEventListener('click', toggleTheme);
 
-  // 언어 드롭다운 - 버튼 클릭 토글
   langBtn.addEventListener('click', (e) => {
     e.stopPropagation();
     toggleLangMenu();
   });
 
-  // 언어 선택
   document.querySelectorAll<HTMLAnchorElement>('.lang-item').forEach((el) => {
     el.addEventListener('click', (e) => {
       e.preventDefault();
@@ -164,7 +179,6 @@ function bindEvents(): void {
     });
   });
 
-  // 외부 클릭 시 드롭다운 닫기
   document.addEventListener('click', (e) => {
     if (!langBtn.contains(e.target as Node) && !langMenu.contains(e.target as Node)) {
       closeLangMenu();
