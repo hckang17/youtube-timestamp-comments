@@ -17,6 +17,7 @@ import type {
 export class YouTubeApiError extends Error {
   constructor(
     public readonly code: number,
+    public readonly reason: string,
     message: string,
   ) {
     super(message);
@@ -24,34 +25,84 @@ export class YouTubeApiError extends Error {
   }
 }
 
+// ── YouTube API 에러 응답 구조 ─────────────────────────────
+
+interface YouTubeErrorDetail {
+  reason: string;
+  message: string;
+}
+
+interface YouTubeErrorResponse {
+  error: {
+    code: number;
+    errors: YouTubeErrorDetail[];
+  };
+}
+
+// ── reason별 에러 메시지 맵 ────────────────────────────────
+
+const COMMENT_THREADS_ERROR_MESSAGES: Record<string, string> = {
+  // 400
+  operationNotSupported: 'This operation is not supported for the given filter.',
+  processingFailure: 'The request failed to process. Please check the request and try again.',
+  // 403
+  commentsDisabled: 'Comments are disabled for this video.',
+  forbidden: 'You do not have permission to access this comment thread.',
+  // 404
+  channelNotFound: 'The specified channel could not be found.',
+  commentThreadNotFound: 'The specified comment thread could not be found.',
+  videoNotFound: 'The video could not be found. Please check the video ID.',
+};
+
+const COMMENTS_ERROR_MESSAGES: Record<string, string> = {
+  // 400
+  operationNotSupported: 'This operation is not supported for the given filter.',
+  // 403
+  forbidden: 'You do not have permission to access this comment.',
+  // 404
+  commentNotFound: 'The specified comment or reply could not be found.',
+};
+
 // ── 에러 핸들링 ────────────────────────────────────────────
 
-async function handleResponse<T>(response: Response): Promise<T> {
+async function handleResponse<T>(
+  response: Response,
+  errorMessages: Record<string, string>,
+): Promise<T> {
   if (response.ok) {
     return response.json() as Promise<T>;
   }
 
+  // YouTube API 에러 응답 본문 파싱 시도
+  let reason = 'unknown';
   let message: string;
 
-  switch (response.status) {
-    case 400:
-      message = 'Invalid request. Please check the video ID.';
-      break;
-    case 401:
-      message = 'Invalid API Key. Please check your API Key in Settings.';
-      break;
-    case 403:
-      message =
-        'API quota exceeded or comments are disabled for this video.';
-      break;
-    case 404:
-      message = 'Video not found.';
-      break;
-    default:
-      message = `YouTube API error: ${response.status} ${response.statusText}`;
+  try {
+    const errorBody = await response.json() as YouTubeErrorResponse;
+    reason = errorBody.error.errors[0]?.reason ?? 'unknown';
+    message =
+      errorMessages[reason] ??
+      getFallbackMessage(response.status, reason);
+  } catch {
+    message = getFallbackMessage(response.status, reason);
   }
 
-  throw new YouTubeApiError(response.status, message);
+  throw new YouTubeApiError(response.status, reason, message);
+}
+
+function getFallbackMessage(status: number, reason: string): string {
+  switch (status) {
+    case 400:
+      return `Invalid request (${reason}). Please check the request parameters.`;
+    case 401:
+      return 'Invalid API Key. Please check your API Key in Settings.';
+    case 403:
+      return `Access forbidden (${reason}). The request is not authorized.`;
+    case 404:
+      return `Resource not found (${reason}).`;
+    default:
+      return `YouTube API error: ${status} (${reason})`;
+  }
 }
 
 // ── API 함수 ───────────────────────────────────────────────
@@ -80,7 +131,10 @@ export async function fetchCommentThreads(
   });
 
   const response = await fetch(`${COMMENT_THREADS_ENDPOINT}?${params.toString()}`);
-  return handleResponse<YouTubeListResponse<CommentThread>>(response);
+  return handleResponse<YouTubeListResponse<CommentThread>>(
+    response,
+    COMMENT_THREADS_ERROR_MESSAGES,
+  );
 }
 
 /**
@@ -101,5 +155,8 @@ export async function fetchReplies(
   });
 
   const response = await fetch(`${COMMENTS_ENDPOINT}?${params.toString()}`);
-  return handleResponse<YouTubeListResponse<Comment>>(response);
+  return handleResponse<YouTubeListResponse<Comment>>(
+    response,
+    COMMENTS_ERROR_MESSAGES,
+  );
 }
