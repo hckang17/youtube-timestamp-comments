@@ -9,7 +9,7 @@ import type { CommentThread } from '../types/youtube.types';
  *   - H:MM:SS     (예: 1:23:45)
  *   - HH:MM:SS    (예: 01:23:45)
  */
-const TIMESTAMP_REGEX = /\b(\d{1,2}):(\d{2})(?::(\d{2}))?\b/g;
+export const TIMESTAMP_REGEX = /\b(\d{1,2}):(\d{2})(?::(\d{2}))?\b/g;
 
 /**
  * 타임스탬프 문자열을 초(seconds)로 변환
