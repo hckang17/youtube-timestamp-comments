@@ -3,6 +3,7 @@
 import type { CommentOrder, CommentThread, Comment } from './youtube.types';
 
 export enum MessageType {
+export enum MessageType {
   FETCH_COMMENTS = 'FETCH_COMMENTS',
   FETCH_REPLIES = 'FETCH_REPLIES',
   GET_VIDEO_ID = 'GET_VIDEO_ID',
