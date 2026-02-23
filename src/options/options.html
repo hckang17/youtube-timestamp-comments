@@ -1,13 +1,113 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>YouTube Timestamp Comments - Setup</title>
   <link rel="stylesheet" href="index.css" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
+  <link
+    href="https://fonts.googleapis.com/icon?family=Material+Icons"
+    rel="stylesheet"
+  />
 </head>
-<body>
-  <div id="app"></div>
+<body class="options-body">
+  <div class="options-card">
+
+    <!-- ── Header ── -->
+    <header class="options-header">
+
+      <!-- Language Dropdown -->
+      <div class="lang-dropdown-wrapper">
+        <button class="lang-btn" id="lang-btn" aria-haspopup="true" aria-expanded="false">
+          <span class="material-icons icon-sm">language</span>
+          <span id="lang-label">Language</span>
+          <span class="material-icons icon-xs">expand_more</span>
+        </button>
+        <div class="lang-menu" id="lang-menu" role="menu">
+          <ul>
+            <li><a href="#" class="lang-item" data-lang="en" role="menuitem">English</a></li>
+            <li><a href="#" class="lang-item" data-lang="ko" role="menuitem">한국어</a></li>
+            <li><a href="#" class="lang-item" data-lang="ja" role="menuitem">日本語</a></li>
+            <li><a href="#" class="lang-item" data-lang="zh" role="menuitem">中文</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Dark Mode Toggle -->
+      <button class="theme-btn" id="theme-toggle" aria-label="Toggle dark mode">
+        <span class="material-icons" id="theme-icon-light">dark_mode</span>
+        <span class="material-icons theme-icon-dark" id="theme-icon-dark">light_mode</span>
+      </button>
+
+    </header>
+
+    <!-- ── Main ── -->
+    <main class="options-main">
+
+      <!-- Title -->
+      <div class="options-title-wrap">
+        <h1 class="options-title" data-i18n="options.title">YouTube Timestamp Comments</h1>
+        <p class="options-subtitle" data-i18n="options.subtitle">
+          Enhance your viewing experience with timestamped notes.
+        </p>
+      </div>
+
+      <!-- API Key Form -->
+      <div class="options-form">
+
+        <div class="form-group">
+          <label class="form-label" for="api-key" data-i18n="options.apiKeyLabel">API Key</label>
+          <div class="input-wrapper">
+            <input
+              class="form-input"
+              id="api-key"
+              name="api-key"
+              type="password"
+              data-i18n-placeholder="options.apiKeyPlaceholder"
+              placeholder="Enter your API Key here"
+              autocomplete="off"
+            />
+            <button class="visibility-btn" id="visibility-btn" type="button" aria-label="Toggle API key visibility">
+              <span class="material-icons" id="eye-icon">visibility</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Save Message -->
+        <p class="save-message hidden" id="save-message" role="alert"></p>
+
+        <div class="form-submit">
+          <button class="setup-btn" id="setup-btn" type="button" data-i18n="options.setupButton">
+            Set up
+          </button>
+        </div>
+
+      </div>
+
+      <!-- Footer -->
+      <div class="options-footer">
+        <p class="footer-text">
+          <span data-i18n="options.guideText">Need help finding your API Key?</span>
+          <a
+            class="footer-link"
+            href="https://developers.google.com/youtube/v3/getting-started"
+            target="_blank"
+            rel="noopener noreferrer"
+            data-i18n="options.guideLink"
+          >
+            Read the guide
+            <span class="material-icons icon-xs">open_in_new</span>
+          </a>
+        </p>
+      </div>
+
+    </main>
+  </div>
+
   <script src="index.js"></script>
 </body>
 </html>
