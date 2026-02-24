@@ -641,5 +641,276 @@ html.dark .skeleton-block { background: #374151; }
   box-shadow: 0 6px 18px var(--color-primary-shadow);
 }
 
+/* ── 설정 페이지 ──────────────────────────────────────────── */
+.settings-page {
+  display: flex;
+  flex-direction: column;
+  width: var(--app-width);
+  height: var(--app-height);
+  background: var(--bg-surface);
+  overflow: hidden;
+}
+
+/* 설정 헤더 */
+.settings-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 14px;
+  height: var(--header-height);
+  border-bottom: 1px solid var(--border-color);
+  flex-shrink: 0;
+}
+
+.settings-back-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px;
+  background: none;
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  color: var(--text-secondary);
+  transition: color var(--transition), background var(--transition);
+}
+.settings-back-btn:hover { color: var(--color-primary); background: rgba(239,68,68,.06); }
+.settings-back-btn .material-icons { font-size: 20px; }
+
+.settings-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+  flex: 1;
+}
+
+.settings-header-right {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* 언어 드롭다운 */
+.lang-dropdown-wrapper { position: relative; }
+
+.lang-btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 5px 8px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  background: none;
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: color var(--transition), background var(--transition);
+}
+.lang-btn:hover { color: var(--color-primary); background: rgba(239,68,68,.06); }
+.lang-btn:focus { outline: none; }
+
+.icon-sm { font-size: 16px !important; }
+.icon-xs { font-size: 13px !important; }
+
+.lang-menu {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 4px);
+  width: 110px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  box-shadow: 0 8px 24px rgba(0,0,0,.12);
+  z-index: 100;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(4px);
+  transition: opacity 0.18s ease, visibility 0.18s ease, transform 0.18s ease;
+  overflow: hidden;
+}
+.lang-menu.open {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+.lang-menu ul { list-style: none; padding: 4px 0; }
+
+.lang-item {
+  display: block;
+  padding: 8px 14px;
+  font-size: 12px;
+  color: var(--text-primary);
+  text-decoration: none;
+  transition: background var(--transition);
+}
+.lang-item:hover { background: var(--bg-hover); }
+.lang-item.active { color: var(--color-primary); font-weight: 600; }
+
+/* 다크모드 토글 */
+.settings-theme-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px;
+  background: none;
+  border: none;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  color: var(--text-secondary);
+  transition: color var(--transition), background var(--transition);
+  line-height: 1;
+}
+.settings-theme-btn:hover { color: var(--text-primary); background: var(--bg-hover); }
+.settings-theme-btn .material-icons { font-size: 18px; }
+
+.settings-theme-icon-dark { display: none; }
+html.dark .settings-theme-icon-light { display: none; }
+html.dark .settings-theme-icon-dark { display: inline; }
+
+/* 설정 본문 */
+.settings-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 28px 24px;
+  overflow-y: auto;
+}
+
+/* 타이틀 영역 */
+.settings-title-wrap {
+  width: 100%;
+  max-width: 360px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-bottom: 8px;
+}
+
+.settings-main-title {
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+}
+
+.settings-subtitle {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.settings-form-group {
+  width: 100%;
+  max-width: 360px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.settings-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.settings-input-wrapper { position: relative; }
+
+.settings-input {
+  width: 100%;
+  padding: 10px 40px 10px 12px;
+  font-size: 13px;
+  background: var(--bg-input);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  outline: none;
+  transition: border-color var(--transition), box-shadow var(--transition);
+}
+.settings-input:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(239,68,68,.12);
+}
+.settings-input::placeholder { color: var(--text-muted); }
+
+.settings-visibility-btn {
+  position: absolute;
+  top: 0; right: 0; bottom: 0;
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-muted);
+  transition: color var(--transition);
+}
+.settings-visibility-btn:hover { color: var(--text-primary); }
+.settings-visibility-btn .material-icons { font-size: 18px; }
+
+/* 저장 메시지 */
+.settings-save-message {
+  width: 100%;
+  max-width: 360px;
+  font-size: 12px;
+  text-align: center;
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+}
+.settings-save-message.success { color: #065F46; background: #D1FAE5; }
+.settings-save-message.error   { color: #991B1B; background: #FEE2E2; }
+html.dark .settings-save-message.success { color: #6EE7B7; background: #064E3B; }
+html.dark .settings-save-message.error   { color: #FCA5A5; background: #7F1D1D; }
+
+/* 저장 버튼 */
+.settings-save-btn {
+  width: 100%;
+  max-width: 360px;
+  padding: 11px;
+  background: var(--color-primary);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  border: none;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  box-shadow: 0 4px 14px var(--color-primary-shadow);
+  transition: background var(--transition), transform var(--transition);
+}
+.settings-save-btn:hover {
+  background: var(--color-primary-hover);
+  transform: translateY(-1px);
+}
+
+/* 설정 푸터 */
+.settings-footer {
+  width: 100%;
+  max-width: 360px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border-color);
+  text-align: center;
+}
+.settings-footer-text {
+  font-size: 12px;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+.settings-footer-link {
+  color: var(--color-primary);
+  font-weight: 500;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  transition: color var(--transition);
+}
+.settings-footer-link:hover { color: var(--color-primary-hover); text-decoration: underline; }
+
 /* ── 유틸 ─────────────────────────────────────────────────── */
 .hidden { display: none !important; }
