@@ -201,19 +201,9 @@ async function fetchComments(
       if (chrome.runtime.lastError) { reject(new Error(chrome.runtime.lastError.message)); return; }
       if (response.type === MessageType.ERROR) { reject(new Error(response.error)); return; }
       resolve({
-        items: (response as FetchCommentsResponse).payload.items,
-        nextPageToken: (response as FetchCommentsResponse).payload.nextPageToken,
+        items: (response).payload.items,
+        nextPageToken: (response).payload.nextPageToken,
       });
-    });
-  });
-}
-
-async function getVideoIdFromTab(): Promise<string | null> {
-  return new Promise((resolve) => {
-    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-      const url = tabs[0]?.url ?? '';
-      const match = url.match(/[?&]v=([^&]+)/);
-      resolve(match?.[1] ?? null);
     });
   });
 }
