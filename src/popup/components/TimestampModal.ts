@@ -18,6 +18,8 @@ export class TimestampModal {
   private rangeDisplay: HTMLElement;
   private rangeValue: number = TIMESTAMP_RANGE_DEFAULT;
   private onSearch: ModalSearchCallback;
+  // named handler — removeEventListener에서 동일 참조 필요
+  private readonly handleKeydown: (e: KeyboardEvent) => void;
 
   constructor(el: HTMLElement, onSearch: ModalSearchCallback) {
     this.el = el;
@@ -25,6 +27,12 @@ export class TimestampModal {
     this.mmInput = this.getEl<HTMLInputElement>('modal-mm');
     this.ssInput = this.getEl<HTMLInputElement>('modal-ss');
     this.rangeDisplay = this.getEl('modal-range-display');
+    // arrow function으로 바인딩하여 this 컨텍스트 유지
+    this.handleKeydown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && !this.el.classList.contains('hidden')) {
+        this.close();
+      }
+    };
     this.bindEvents();
     this.updateRangeDisplay();
   }
@@ -77,12 +85,8 @@ export class TimestampModal {
       if (e.target === this.el) this.close();
     });
 
-    // ESC 키로 닫기
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && !this.el.classList.contains('hidden')) {
-        this.close();
-      }
-    });
+    // ESC 키로 닫기 — named handler로 등록하여 destroy()에서 제거 가능
+    document.addEventListener('keydown', this.handleKeydown);
 
     // range + 버튼
     const plusBtn = this.el.querySelector<HTMLElement>('#modal-range-plus');
@@ -143,5 +147,11 @@ export class TimestampModal {
     const searchBtn = this.el.querySelector<HTMLElement>('#modal-search-btn');
     if (titleEl) titleEl.textContent = t('modal', 'title');
     if (searchBtn) searchBtn.textContent = t('modal', 'searchButton');
+  }
+
+  // ── 정리 ──────────────────────────────────────────────────
+
+  destroy(): void {
+    document.removeEventListener('keydown', this.handleKeydown);
   }
 }
