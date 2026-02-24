@@ -1,9 +1,7 @@
 // Header 컴포넌트
-// 댓글 수/more 버튼, Sort by 드롭다운, 타임스탬프 검색, Settings, 다크모드 토글
+// 댓글 수/more 버튼, Sort by 드롭다운, 타임스탬프 검색, Settings
 
 import { t } from '../../i18n';
-import { setStorage } from '../../utils/storage.util';
-import { STORAGE_KEY_THEME, THEME_DARK, THEME_LIGHT } from '../../constants';
 import type { CommentOrder } from '../../types/youtube.types';
 
 export interface HeaderCallbacks {
@@ -73,13 +71,6 @@ export class Header {
     const settingsBtn = this.el.querySelector<HTMLElement>('#settings-btn');
     settingsBtn?.addEventListener('click', () => {
       this.callbacks.onSettings();
-    });
-
-    // 다크모드 토글
-    const themeBtn = this.el.querySelector<HTMLElement>('#theme-btn');
-    themeBtn?.addEventListener('click', () => {
-      const isDark = document.documentElement.classList.toggle('dark');
-      void setStorage({ [STORAGE_KEY_THEME]: isDark ? THEME_DARK : THEME_LIGHT });
     });
   }
 
