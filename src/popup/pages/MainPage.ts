@@ -199,7 +199,13 @@ async function fetchComments(
   return new Promise((resolve, reject) => {
     chrome.runtime.sendMessage(request, (response: FetchCommentsResponse | ErrorResponse) => {
       if (chrome.runtime.lastError) { reject(new Error(chrome.runtime.lastError.message)); return; }
-      if (response.type === MessageType.ERROR) { reject(new Error(response.error)); return; }
+      if (response.type === MessageType.ERROR) {
+        const errMsg = response.errorCode === 'NO_API_KEY'
+          ? t('popup', 'errorNoApiKey')
+          : response.error;
+        reject(new Error(errMsg));
+        return;
+      }
       resolve({
         items: (response).payload.items,
         nextPageToken: (response).payload.nextPageToken,

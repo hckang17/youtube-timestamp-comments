@@ -64,6 +64,7 @@ export interface ErrorResponse {
   type: MessageType.ERROR;
   error: string;
   code?: number;
+  errorCode?: 'NO_API_KEY';
 }
 
 export type ResponseMessage =

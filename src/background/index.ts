@@ -81,6 +81,7 @@ async function handleFetchComments(
         type: MessageType.ERROR,
         error: 'API Key is not set. Please go to Settings.',
         code: 401,
+        errorCode: 'NO_API_KEY',
       });
       return;
     }
@@ -114,6 +115,7 @@ async function handleFetchReplies(
         type: MessageType.ERROR,
         error: 'API Key is not set. Please go to Settings.',
         code: 401,
+        errorCode: 'NO_API_KEY',
       });
       return;
     }
