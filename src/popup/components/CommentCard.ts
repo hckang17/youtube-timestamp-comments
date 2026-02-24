@@ -63,7 +63,7 @@ export function createCommentCard(
 
   // 프로필 이미지
   const avatarSrc = snippet.authorProfileImageUrl ?? '';
-  const authorName = snippet.authorDisplayName ?? '';
+  const authorName = (snippet.authorDisplayName ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
   const publishedAt = formatRelativeTime(snippet.publishedAt);
   const editedSuffix = isEdited ? ` (edited)` : '';
   const bodyHtml = linkifyTimestamps(snippet.textDisplay ?? '');
