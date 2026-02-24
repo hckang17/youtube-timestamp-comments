@@ -10,6 +10,7 @@ export interface HeaderCallbacks {
   onMore: () => void;
   onSortChange: (order: CommentOrder) => void;
   onSearchTimestamp: () => void;
+  onSettings: () => void;
 }
 
 export class Header {
@@ -71,7 +72,7 @@ export class Header {
     // Settings 버튼
     const settingsBtn = this.el.querySelector<HTMLElement>('#settings-btn');
     settingsBtn?.addEventListener('click', () => {
-      chrome.runtime.openOptionsPage();
+      this.callbacks.onSettings();
     });
 
     // 다크모드 토글

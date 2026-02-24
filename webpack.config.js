@@ -7,7 +7,6 @@ module.exports = {
     'background/index': './src/background/index.ts',
     'content/index': './src/content/index.ts',
     'popup/index': './src/popup/index.ts',
-    'options/index': './src/options/index.ts',
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
@@ -41,7 +40,6 @@ module.exports = {
       patterns: [
         { from: 'src/manifest.json', to: 'manifest.json' },
         { from: 'src/popup/popup.html', to: 'popup/popup.html' },
-        { from: 'src/options/options.html', to: 'options/options.html' },
         {
           from: 'src/assets',
           to: 'assets',
