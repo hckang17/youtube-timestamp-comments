@@ -29,8 +29,7 @@ export class TimestampSidebar {
   }
 
   private getEl(id: string): HTMLElement {
-    const el = this.sidebar.querySelector<HTMLElement>(`#${id}`)
-      ?? document.getElementById(id);
+    const el = this.sidebar.querySelector<HTMLElement>(`#${id}`);
     if (!el) throw new Error(`TimestampSidebar: #${id} not found`);
     return el;
   }
