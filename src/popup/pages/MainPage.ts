@@ -2,7 +2,7 @@
 // 사이드바 + 헤더 + 댓글 목록으로 구성된 메인 화면을 렌더링한다.
 
 import { t } from '../../i18n';
-import { MessageType } from '../../types/message.types';
+import { MessageType, ErrorCode } from '../../types/message.types';
 import type { FetchCommentsRequest, FetchCommentsResponse, ErrorResponse } from '../../types/message.types';
 import type { CommentThread, CommentOrder } from '../../types/youtube.types';
 import { hasTimestamp, extractTimestamps, filterCommentsByTimestampRange } from '../../utils/timestamp.util';
@@ -200,7 +200,7 @@ async function fetchComments(
     chrome.runtime.sendMessage(request, (response: FetchCommentsResponse | ErrorResponse) => {
       if (chrome.runtime.lastError) { reject(new Error(chrome.runtime.lastError.message)); return; }
       if (response.type === MessageType.ERROR) {
-        const errMsg = response.errorCode === 'NO_API_KEY'
+        const errMsg = response.errorCode === ErrorCode.NO_API_KEY
           ? t('popup', 'errorNoApiKey')
           : response.error;
         reject(new Error(errMsg));

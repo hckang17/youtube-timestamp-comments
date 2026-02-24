@@ -4,7 +4,7 @@
 import { fetchCommentThreads, fetchReplies, YouTubeApiError } from '../services/youtube.service';
 import { getStorage } from '../utils/storage.util';
 import { STORAGE_KEY_API_KEY } from '../constants';
-import { MessageType } from '../types/message.types';
+import { MessageType, ErrorCode } from '../types/message.types';
 import type {
   RequestMessage,
   FetchCommentsRequest,
@@ -67,6 +67,15 @@ async function getApiKey(): Promise<string | null> {
   return apiKey ?? null;
 }
 
+// ── 공통 에러 응답 상수 ────────────────────────────────────
+
+const NO_API_KEY_ERROR: ResponseMessage = {
+  type: MessageType.ERROR,
+  error: 'API Key is not set. Please go to Settings.',
+  code: 401,
+  errorCode: ErrorCode.NO_API_KEY,
+};
+
 // ── FETCH_COMMENTS 처리 ────────────────────────────────────
 
 async function handleFetchComments(
@@ -77,12 +86,7 @@ async function handleFetchComments(
     const apiKey = await getApiKey();
 
     if (!apiKey) {
-      sendResponse({
-        type: MessageType.ERROR,
-        error: 'API Key is not set. Please go to Settings.',
-        code: 401,
-        errorCode: 'NO_API_KEY',
-      });
+      sendResponse(NO_API_KEY_ERROR);
       return;
     }
 
@@ -111,12 +115,7 @@ async function handleFetchReplies(
     const apiKey = await getApiKey();
 
     if (!apiKey) {
-      sendResponse({
-        type: MessageType.ERROR,
-        error: 'API Key is not set. Please go to Settings.',
-        code: 401,
-        errorCode: 'NO_API_KEY',
-      });
+      sendResponse(NO_API_KEY_ERROR);
       return;
     }
 
