@@ -3,7 +3,7 @@
 
 import { t } from '../../i18n';
 import { formatRelativeTime } from '../../utils/date.util';
-import { escapeHtml, linkifyTimestamps } from '../../utils/dom.util';
+import { escapeHtml, linkifyTimestamps, createAvatarImg } from '../../utils/dom.util';
 import type { CommentThread } from '../../types/youtube.types';
 
 export type ReplyToggleCallback = (thread: CommentThread, el: HTMLElement) => void;
@@ -45,8 +45,8 @@ export function createCommentCard(
   article.className = 'comment-card';
   article.dataset.threadId = thread.id;
 
-  // 프로필 이미지
-  const avatarSrc = escapeHtml(snippet.authorProfileImageUrl ?? '');
+  // 프로필 이미지 (CSP 안전 방식)
+  const avatarSrc = snippet.authorProfileImageUrl ?? '';
   const authorName = escapeHtml(snippet.authorDisplayName ?? '');
   const publishedAt = formatRelativeTime(snippet.publishedAt);
   const editedSuffix = isEdited ? ` (edited)` : '';
@@ -63,28 +63,32 @@ export function createCommentCard(
     </div>
   ` : '';
 
-  article.innerHTML = `
-    <img class="comment-avatar" src="${avatarSrc}" alt="${authorName}" loading="lazy"
-         onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 40 40%22><circle cx=%2220%22 cy=%2220%22 r=%2220%22 fill=%22%23e5e7eb%22/></svg>'" />
-    <div class="comment-body">
-      <div class="comment-meta">
-        <span class="comment-author">${authorName}</span>
-        <span class="comment-time">${publishedAt}${editedSuffix}</span>
-      </div>
-      <div class="comment-text">${bodyHtml}</div>
-      <div class="comment-actions">
-        <button class="comment-action-btn" disabled>
-          <span class="material-icons">thumb_up</span>
-          ${likeHtml}
-        </button>
-        <button class="comment-action-btn" disabled>
-          <span class="material-icons">thumb_down</span>
-        </button>
-        <span class="comment-reply-label">${t('popup', 'reply')}</span>
-      </div>
-      ${repliesHtml}
+  // avatar는 onerror 인라인 핸들러 대신 createElement + addEventListener('error') 방식
+  const avatar = createAvatarImg(avatarSrc, authorName);
+
+  const body = document.createElement('div');
+  body.className = 'comment-body';
+  body.innerHTML = `
+    <div class="comment-meta">
+      <span class="comment-author">${authorName}</span>
+      <span class="comment-time">${publishedAt}${editedSuffix}</span>
     </div>
+    <div class="comment-text">${bodyHtml}</div>
+    <div class="comment-actions">
+      <button class="comment-action-btn" disabled>
+        <span class="material-icons">thumb_up</span>
+        ${likeHtml}
+      </button>
+      <button class="comment-action-btn" disabled>
+        <span class="material-icons">thumb_down</span>
+      </button>
+      <span class="comment-reply-label">${t('popup', 'reply')}</span>
+    </div>
+    ${repliesHtml}
   `;
+
+  article.appendChild(avatar);
+  article.appendChild(body);
 
   // 답글 토글 이벤트
   const replyToggleBtn = article.querySelector<HTMLElement>('.reply-toggle-btn');

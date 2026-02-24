@@ -18,7 +18,28 @@ export function escapeHtml(text: string): string {
     .replace(/'/g, '&#39;');
 }
 
-// ── 타임스탬프 → 링크 변환 ────────────────────────────────
+// ── 프로필 이미지 생성 ────────────────────────────────────
+
+/** fallback SVG: 회색 원 */
+const FALLBACK_AVATAR =
+  'data:image/svg+xml,' +
+  encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><circle cx="20" cy="20" r="20" fill="#e5e7eb"/></svg>');
+
+/**
+ * 프로필 이미지 <img> 요소를 생성한다.
+ * CSP 위반 없이 addEventListener('error')로 fallback을 처리한다.
+ */
+export function createAvatarImg(src: string, alt: string, extraClass?: string): HTMLImageElement {
+  const img = document.createElement('img');
+  img.className = extraClass ? `comment-avatar ${extraClass}` : 'comment-avatar';
+  img.src = src;
+  img.alt = alt;
+  img.loading = 'lazy';
+  img.addEventListener('error', () => {
+    img.src = FALLBACK_AVATAR;
+  }, { once: true });
+  return img;
+}
 
 /**
  * 댓글 텍스트 내 타임스탬프를 anchor 링크로 변환한다.

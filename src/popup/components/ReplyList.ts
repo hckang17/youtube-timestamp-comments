@@ -3,7 +3,7 @@
 
 import { t } from '../../i18n';
 import { formatRelativeTime } from '../../utils/date.util';
-import { escapeHtml, linkifyTimestamps } from '../../utils/dom.util';
+import { escapeHtml, linkifyTimestamps, createAvatarImg } from '../../utils/dom.util';
 import { MessageType } from '../../types/message.types';
 import type { Comment, CommentThread } from '../../types/youtube.types';
 import type { FetchRepliesRequest, FetchRepliesResponse } from '../../types/message.types';
@@ -21,7 +21,7 @@ function createReplyCard(comment: Comment): HTMLElement {
   const div = document.createElement('div');
   div.className = 'reply-card';
 
-  const avatarSrc = escapeHtml(snippet.authorProfileImageUrl ?? '');
+  const avatarSrc = snippet.authorProfileImageUrl ?? '';
   const authorName = escapeHtml(snippet.authorDisplayName ?? '');
   const publishedAt = formatRelativeTime(snippet.publishedAt);
   const bodyHtml = linkifyTimestamps(snippet.textDisplay ?? '');
@@ -29,26 +29,30 @@ function createReplyCard(comment: Comment): HTMLElement {
     ? `<span class="comment-like-count">${likeCount >= 1000 ? `${(likeCount / 1000).toFixed(1)}K` : likeCount}</span>`
     : '';
 
-  div.innerHTML = `
-    <img class="comment-avatar comment-avatar-sm" src="${avatarSrc}" alt="${authorName}" loading="lazy"
-         onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 40 40%22><circle cx=%2220%22 cy=%2220%22 r=%2220%22 fill=%22%23e5e7eb%22/></svg>'" />
-    <div class="comment-body">
-      <div class="comment-meta">
-        <span class="comment-author">${authorName}</span>
-        <span class="comment-time">${publishedAt}</span>
-      </div>
-      <div class="comment-text">${bodyHtml}</div>
-      <div class="comment-actions">
-        <button class="comment-action-btn" disabled>
-          <span class="material-icons">thumb_up</span>
-          ${likeHtml}
-        </button>
-        <button class="comment-action-btn" disabled>
-          <span class="material-icons">thumb_down</span>
-        </button>
-      </div>
+  // avatar는 onerror 인라인 핸들러 대신 createElement + addEventListener('error') 방식
+  const avatar = createAvatarImg(avatarSrc, authorName, 'comment-avatar-sm');
+
+  const body = document.createElement('div');
+  body.className = 'comment-body';
+  body.innerHTML = `
+    <div class="comment-meta">
+      <span class="comment-author">${authorName}</span>
+      <span class="comment-time">${publishedAt}</span>
+    </div>
+    <div class="comment-text">${bodyHtml}</div>
+    <div class="comment-actions">
+      <button class="comment-action-btn" disabled>
+        <span class="material-icons">thumb_up</span>
+        ${likeHtml}
+      </button>
+      <button class="comment-action-btn" disabled>
+        <span class="material-icons">thumb_down</span>
+      </button>
     </div>
   `;
+
+  div.appendChild(avatar);
+  div.appendChild(body);
   return div;
 }
 
