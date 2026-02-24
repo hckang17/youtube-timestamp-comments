@@ -129,13 +129,20 @@ export async function toggleReplyList(
     container.innerHTML = '';
     renderReplies(container, replies);
   } catch (err) {
-    container.innerHTML = `<p class="reply-error">${err instanceof Error ? err.message : 'Failed to load replies.'}</p>`;
+    container.innerHTML = '';
+    const p = document.createElement('p');
+    p.className = 'reply-error';
+    p.textContent = err instanceof Error ? err.message : 'Failed to load replies.';
+    container.appendChild(p);
   }
 }
 
 function renderReplies(container: HTMLElement, replies: Comment[]): void {
   if (replies.length === 0) {
-    container.innerHTML = `<p class="reply-empty">${t('popup', 'noComments')}</p>`;
+    const p = document.createElement('p');
+    p.className = 'reply-empty';
+    p.textContent = t('popup', 'noComments');
+    container.appendChild(p);
     return;
   }
   replies.forEach((reply) => container.appendChild(createReplyCard(reply)));
