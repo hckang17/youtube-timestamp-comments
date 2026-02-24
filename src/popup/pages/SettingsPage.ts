@@ -160,8 +160,7 @@ export function mountSettingsPage(root: HTMLElement): void {
   applyI18n(apiKeyInput);
   updateActiveLangItem(langLabel);
 
-  // ← 뒤로가기
-  backBtn.addEventListener('click', () => router.navigate('/'));
+  // ← 뒤로가기 + document 리스너 정리는 아래 onDocumentClick 블록에서 함께 처리
 
   // API Key 저장
   let saveTimeout: number;
@@ -220,9 +219,17 @@ export function mountSettingsPage(root: HTMLElement): void {
     });
   });
 
-  document.addEventListener('click', (e) => {
+  // named function으로 선언하여 페이지 이탈 시 removeEventListener로 정리 가능하게 함
+  function onDocumentClick(e: MouseEvent): void {
     if (!langBtn.contains(e.target as Node) && !langMenu.contains(e.target as Node)) {
       closeLangMenu();
     }
-  }, { once: false });
+  }
+  document.addEventListener('click', onDocumentClick);
+
+  // 뒤로가기 시 document 리스너 정리
+  backBtn.addEventListener('click', () => {
+    document.removeEventListener('click', onDocumentClick);
+    router.navigate('/');
+  }, { once: true });
 }
