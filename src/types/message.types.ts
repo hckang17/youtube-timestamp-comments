@@ -9,6 +9,11 @@ export enum MessageType {
   ERROR = 'ERROR',
 }
 
+export enum ErrorCode {
+  NO_API_KEY = 'NO_API_KEY',
+  // 향후 에러 코드 추가 시 여기에 작성
+}
+
 // ── 요청 타입 ──────────────────────────────────────────────
 
 export interface FetchCommentsRequest {
@@ -64,6 +69,7 @@ export interface ErrorResponse {
   type: MessageType.ERROR;
   error: string;
   code?: number;
+  errorCode?: ErrorCode;
 }
 
 export type ResponseMessage =

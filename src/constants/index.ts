@@ -21,8 +21,8 @@ export const STORAGE_KEY_THEME = 'theme';
 export const STORAGE_KEY_LANGUAGE = 'language';
 
 // ── 다크모드 ───────────────────────────────────────────────
-export const THEME_DARK = 'dark' as const;
-export const THEME_LIGHT = 'light' as const;
+export const THEME_DARK = 'dark';
+export const THEME_LIGHT = 'light';
 
 // ── 기본 언어 ──────────────────────────────────────────────
-export const DEFAULT_LANGUAGE = 'en' as const;
+export const DEFAULT_LANGUAGE = 'en';
