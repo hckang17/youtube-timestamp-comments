@@ -3,7 +3,7 @@
 
 import { t } from '../../i18n';
 import { formatRelativeTime } from '../../utils/date.util';
-import { TIMESTAMP_REGEX } from '../../utils/timestamp.util';
+import { escapeHtml, linkifyTimestamps } from '../../utils/dom.util';
 import { MessageType } from '../../types/message.types';
 import type { Comment, CommentThread } from '../../types/youtube.types';
 import type { FetchRepliesRequest, FetchRepliesResponse } from '../../types/message.types';
@@ -11,20 +11,6 @@ import { createSkeletonCard } from './CommentCard';
 
 // threadId → 캐시된 답글 목록
 const replyCache = new Map<string, Comment[]>();
-
-// ── 답글 텍스트 내 타임스탬프 → 링크 변환 ─────────────────
-
-function linkifyTimestamps(text: string): string {
-  const escaped = text
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;');
-  return escaped.replace(
-    new RegExp(TIMESTAMP_REGEX.source, 'g'),
-    (ts) => `<a class="comment-ts-link" data-timestamp="${ts}">${ts}</a>`,
-  );
-}
 
 // ── 답글 카드 생성 ────────────────────────────────────────
 
@@ -35,8 +21,8 @@ function createReplyCard(comment: Comment): HTMLElement {
   const div = document.createElement('div');
   div.className = 'reply-card';
 
-  const avatarSrc = snippet.authorProfileImageUrl ?? '';
-  const authorName = snippet.authorDisplayName ?? '';
+  const avatarSrc = escapeHtml(snippet.authorProfileImageUrl ?? '');
+  const authorName = escapeHtml(snippet.authorDisplayName ?? '');
   const publishedAt = formatRelativeTime(snippet.publishedAt);
   const bodyHtml = linkifyTimestamps(snippet.textDisplay ?? '');
   const likeHtml = likeCount > 0

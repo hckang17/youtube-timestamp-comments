@@ -3,7 +3,7 @@
 
 import { t } from '../../i18n';
 import { formatRelativeTime } from '../../utils/date.util';
-import { TIMESTAMP_REGEX } from '../../utils/timestamp.util';
+import { escapeHtml, linkifyTimestamps } from '../../utils/dom.util';
 import type { CommentThread } from '../../types/youtube.types';
 
 export type ReplyToggleCallback = (thread: CommentThread, el: HTMLElement) => void;
@@ -21,22 +21,6 @@ export function createSkeletonCard(): HTMLElement {
     </div>
   `;
   return article;
-}
-
-// ── 댓글 텍스트 내 타임스탬프 → 링크 변환 ────────────────
-
-function linkifyTimestamps(text: string): string {
-  // XSS 방지: 텍스트를 먼저 이스케이프 후 타임스탬프만 링크 처리
-  const escaped = text
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;');
-
-  return escaped.replace(
-    new RegExp(TIMESTAMP_REGEX.source, 'g'),
-    (ts) => `<a class="comment-ts-link" data-timestamp="${ts}">${ts}</a>`,
-  );
 }
 
 // ── 좋아요 수 포맷 ────────────────────────────────────────
@@ -62,8 +46,8 @@ export function createCommentCard(
   article.dataset.threadId = thread.id;
 
   // 프로필 이미지
-  const avatarSrc = snippet.authorProfileImageUrl ?? '';
-  const authorName = (snippet.authorDisplayName ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+  const avatarSrc = escapeHtml(snippet.authorProfileImageUrl ?? '');
+  const authorName = escapeHtml(snippet.authorDisplayName ?? '');
   const publishedAt = formatRelativeTime(snippet.publishedAt);
   const editedSuffix = isEdited ? ` (edited)` : '';
   const bodyHtml = linkifyTimestamps(snippet.textDisplay ?? '');
