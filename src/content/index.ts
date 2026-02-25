@@ -1,9 +1,10 @@
 // Content Script
 // YouTube 페이지에서 현재 영상의 videoId를 추출한다.
 // Popup이 chrome.tabs.sendMessage로 GET_VIDEO_ID를 요청하면 응답한다.
+// Popup이 chrome.tabs.sendMessage로 SEEK_TO를 요청하면 영상 시간을 이동한다.
 
 import { MessageType } from '../types/message.types';
-import type { GetVideoIdRequest, GetVideoIdResponse } from '../types/message.types';
+import type { GetVideoIdRequest, GetVideoIdResponse, SeekToRequest } from '../types/message.types';
 
 // ── videoId 추출 ───────────────────────────────────────────
 
@@ -16,13 +17,21 @@ function extractVideoId(): string | null {
   return url.searchParams.get('v');
 }
 
-// ── Popup 요청 리스너 ──────────────────────────────────────
-// Popup이 chrome.tabs.sendMessage(tabId, { type: GET_VIDEO_ID })로 요청하면
-// 현재 videoId를 응답한다.
+// ── 영상 시간 이동 ─────────────────────────────────────────
+
+/**
+ * YouTube 영상 <video> 요소의 currentTime을 변경해 특정 구간으로 이동한다.
+ */
+function seekTo(seconds: number): void {
+  const video = document.querySelector<HTMLVideoElement>('video');
+  if (video) video.currentTime = seconds;
+}
+
+// ── 메시지 리스너 ──────────────────────────────────────────
 
 chrome.runtime.onMessage.addListener(
   (
-    message: GetVideoIdRequest,
+    message: GetVideoIdRequest | SeekToRequest,
     _sender: chrome.runtime.MessageSender,
     sendResponse: (response: GetVideoIdResponse) => void,
   ) => {
@@ -32,6 +41,9 @@ chrome.runtime.onMessage.addListener(
         payload: { videoId: extractVideoId() },
       });
     }
-    // 동기 응답이므로 true 반환 불필요
+
+    if (message.type === MessageType.SEEK_TO) {
+      seekTo(message.payload.seconds);
+    }
   },
 );

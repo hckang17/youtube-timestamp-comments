@@ -6,6 +6,7 @@ export enum MessageType {
   FETCH_COMMENTS = 'FETCH_COMMENTS',
   FETCH_REPLIES = 'FETCH_REPLIES',
   GET_VIDEO_ID = 'GET_VIDEO_ID',
+  SEEK_TO = 'SEEK_TO',
   ERROR = 'ERROR',
 }
 
@@ -34,6 +35,11 @@ export interface FetchRepliesRequest {
 
 export interface GetVideoIdRequest {
   type: MessageType.GET_VIDEO_ID;
+}
+
+export interface SeekToRequest {
+  type: MessageType.SEEK_TO;
+  payload: { seconds: number };
 }
 
 export type RequestMessage =

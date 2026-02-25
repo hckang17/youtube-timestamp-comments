@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "description": "View and search YouTube comments containing timestamps",
 
-  "permissions": ["storage", "activeTab"],
+  "permissions": ["storage", "activeTab", "tabs"],
   "host_permissions": [
     "https://www.youtube.com/*",
     "https://www.googleapis.com/youtube/v3/*"
