@@ -27,13 +27,13 @@
 <table>
     <tr>
        <th width="33%">
-          <p><a title="show-whitespace"></a> タイムスタンプベースのコメント一覧表示
+          <p><a title="view-comment-list"></a> タイムスタンプベースのコメント一覧表示
           <p><img src="https://chrome-extension-youtube-timestamp-comments.s3.ap-northeast-2.amazonaws.com/comment-list-en.gif">
        <th width="33%">
-          <p><a title="unreleased-commits"></a> 特定のタイムスタンプに対するコメントの詳細表示
+          <p><a title="view-detailed-comments"></a> 特定のタイムスタンプに対するコメントの詳細表示
           <p><img src="https://chrome-extension-youtube-timestamp-comments.s3.ap-northeast-2.amazonaws.com/comment-search-detail-en.gif">
        <th width="33%">
-          <p><a title="pr-base-commit"></a> 特定のタイムスタンプへ動画を移動
+          <p><a title="jump-to-a-specific-timestamp"></a> 特定のタイムスタンプへ動画を移動
           <p><img src="https://chrome-extension-youtube-timestamp-comments.s3.ap-northeast-2.amazonaws.com/move-timestamp-en.gif">
 
 </table>
@@ -81,7 +81,7 @@
 3. `API の制限`で`キーを制限`をクリックし、フィルターで`YouTube Data API v3`を選択して`作成`をクリック
 
    | API の制限 1                                                        | API の制限 2                                                        |
-          |-----------------------------------------------------------------|-----------------------------------------------------------------|
+   |-----------------------------------------------------------------|-----------------------------------------------------------------|
    | <img width="400px" src="docs/resources/create-api-key2-jp.png"> | <img width="400px" src="docs/resources/create-api-key3-jp.png"> |
 
 

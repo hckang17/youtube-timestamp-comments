@@ -27,13 +27,13 @@ Key Features
 <table>
     <tr>
        <th width="33%">
-          <p><a title="show-whitespace"></a> View comment list based on timestamps
+          <p><a title="view-comment-list"></a> View comment list based on timestamps
           <p><img src="https://chrome-extension-youtube-timestamp-comments.s3.ap-northeast-2.amazonaws.com/comment-list-en.gif">
        <th width="33%">
-          <p><a title="unreleased-commits"></a> View detailed comments for a specific timestamp
+          <p><a title="view-detailed-comments"></a> View detailed comments for a specific timestamp
           <p><img src="https://chrome-extension-youtube-timestamp-comments.s3.ap-northeast-2.amazonaws.com/comment-search-detail-en.gif">
        <th width="33%">
-          <p><a title="pr-base-commit"></a> Jump to a specific timestamp in the video
+          <p><a title="jump-to-a-specific-timestamp"></a> Jump to a specific timestamp in the video
           <p><img src="https://chrome-extension-youtube-timestamp-comments.s3.ap-northeast-2.amazonaws.com/move-timestamp-en.gif">
 
 </table>
@@ -81,7 +81,7 @@ To use this extension, you need an API key for the YouTube Data API. Follow the 
 3. Under `API restrictions`, click `Restrict key`, select `YouTube Data API v3` from the filter, then click `Create`
 
    | API Restrictions 1                                                  | API Restrictions 2                                                  |
-          |-----------------------------------------------------------------|-----------------------------------------------------------------|
+   |-----------------------------------------------------------------|-----------------------------------------------------------------|
    | <img width="400px" src="docs/resources/create-api-key2-en.png"> | <img width="400px" src="docs/resources/create-api-key3-en.png"> |
 
 

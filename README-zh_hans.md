@@ -27,13 +27,13 @@
 <table>
     <tr>
        <th width="33%">
-          <p><a title="show-whitespace"></a> 基于时间戳的评论列表查看
+          <p><a title="view-comment-list"></a> 基于时间戳的评论列表查看
           <p><img src="https://chrome-extension-youtube-timestamp-comments.s3.ap-northeast-2.amazonaws.com/comment-list-en.gif">
        <th width="33%">
-          <p><a title="unreleased-commits"></a> 查看特定时间戳的评论详情
+          <p><a title="view-detailed-comments"></a> 查看特定时间戳的评论详情
           <p><img src="https://chrome-extension-youtube-timestamp-comments.s3.ap-northeast-2.amazonaws.com/comment-search-detail-en.gif">
        <th width="33%">
-          <p><a title="pr-base-commit"></a> 跳转到特定时间戳
+          <p><a title="jump-to-a-specific-timestamp"></a> 跳转到特定时间戳
           <p><img src="https://chrome-extension-youtube-timestamp-comments.s3.ap-northeast-2.amazonaws.com/move-timestamp-en.gif">
 
 </table>
@@ -81,7 +81,7 @@
 3. 在`API 限制`中点击`限制密钥`，在过滤器中选择`YouTube Data API v3`后点击`创建`
 
    | API 限制 1                                                              | API 限制 2                                                              |
-          |-----------------------------------------------------------------|-----------------------------------------------------------------|
+   |-----------------------------------------------------------------|-----------------------------------------------------------------|
    | <img width="400px" src="docs/resources/create-api-key2-zh_hans.png"> | <img width="400px" src="docs/resources/create-api-key3-zh_hans.png"> |
 
 

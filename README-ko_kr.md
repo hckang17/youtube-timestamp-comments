@@ -27,13 +27,13 @@
 <table>
 	<tr>
 		<th width="33%">
-			<p><a title="show-whitespace"></a> 타임스탬프 기반의 댓글 리스트 조회
+			<p><a title="view-comment-list"></a> 타임스탬프 기반의 댓글 리스트 조회
 			<p><img src="https://chrome-extension-youtube-timestamp-comments.s3.ap-northeast-2.amazonaws.com/comment-list-kor.gif">
 		<th width="33%">
-			<p><a title="unreleased-commits"></a> 특정 타임스탬프에 대한 댓글 상세 조회
+			<p><a title="view-detailed-comments"></a> 특정 타임스탬프에 대한 댓글 상세 조회
 			<p><img src="https://chrome-extension-youtube-timestamp-comments.s3.ap-northeast-2.amazonaws.com/comment-search-detail-kor.gif">
 		<th width="33%">
-			<p><a title="pr-base-commit"></a> 특정 타임스탬프로 영상 이동
+			<p><a title="jump-to-a-specific-timestamp"></a> 특정 타임스탬프로 영상 이동
 			<p><img src="https://chrome-extension-youtube-timestamp-comments.s3.ap-northeast-2.amazonaws.com/move-timestamp-kor.gif">
 
 </table>
