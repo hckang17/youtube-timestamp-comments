@@ -5,7 +5,7 @@ import './popup.css';
 
 import { initI18n } from '../i18n';
 import { getStorageMultiple } from '../utils/storage.util';
-import { STORAGE_KEY_THEME, STORAGE_KEY_LANGUAGE, THEME_DARK } from '../constants';
+import { STORAGE_KEY_THEME, STORAGE_KEY_LANGUAGE, STORAGE_KEY_API_KEY, THEME_DARK } from '../constants';
 import { router } from './router';
 import { mountMainPage } from './pages/MainPage';
 import { mountSettingsPage } from './pages/SettingsPage';
@@ -27,7 +27,7 @@ async function getTabInfo(): Promise<{ videoId: string | null; tabId: number | n
 
 async function main(): Promise<void> {
   // 저장된 테마 적용
-  const stored = await getStorageMultiple([STORAGE_KEY_THEME, STORAGE_KEY_LANGUAGE]);
+  const stored = await getStorageMultiple([STORAGE_KEY_THEME, STORAGE_KEY_LANGUAGE, STORAGE_KEY_API_KEY]);
   if (stored.theme === THEME_DARK) document.documentElement.classList.add('dark');
 
   // i18n 초기화
@@ -47,8 +47,12 @@ async function main(): Promise<void> {
     }
   });
 
-  // 초기 라우트 — 메인 페이지
-  void mountMainPage(root, videoId, tabId);
+  // 초기 라우트 — API Key 없으면 SettingsPage, 있으면 MainPage
+  if (!stored[STORAGE_KEY_API_KEY]) {
+    router.navigate('/settings');
+  } else {
+    void mountMainPage(root, videoId, tabId);
+  }
 }
 
 document.addEventListener('DOMContentLoaded', () => { void main(); });
