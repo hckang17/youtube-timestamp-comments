@@ -13,17 +13,14 @@ import { mountSettingsPage } from './pages/SettingsPage';
 // ── videoId / tabId 추출 ──────────────────────────────────
 
 async function getTabInfo(): Promise<{ videoId: string | null; tabId: number | null }> {
-  return new Promise((resolve) => {
-    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-      const tab = tabs[0];
-      const url = tab?.url ?? '';
-      const match = url.match(/[?&]v=([^&]+)/);
-      resolve({
-        videoId: match?.[1] ?? null,
-        tabId: tab?.id ?? null,
-      });
-    });
-  });
+  const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
+  const tab = tabs[0];
+  const url = tab?.url ?? '';
+  const match = url.match(/[?&]v=([^&]+)/);
+  return {
+    videoId: match?.[1] ?? null,
+    tabId: tab?.id ?? null,
+  };
 }
 
 // ── 진입점 ────────────────────────────────────────────────

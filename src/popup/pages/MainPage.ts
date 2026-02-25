@@ -288,7 +288,7 @@ export async function mountMainPage(root: HTMLElement, videoId: string | null, t
       // 콜백을 넘겨 lastError를 소비함으로써 content script 미주입 탭에서의 uncaught 오류 방지
       chrome.tabs.sendMessage(
         tabId,
-        { type: 'SEEK_TO', payload: { seconds: timestampToSeconds(ts) } },
+        { type: MessageType.SEEK_TO, payload: { seconds: timestampToSeconds(ts) } },
         () => { void chrome.runtime.lastError; },
       );
     });
