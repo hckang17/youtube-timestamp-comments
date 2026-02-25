@@ -102,6 +102,15 @@ function getEl<T extends HTMLElement>(id: string): T {
   return el;
 }
 
+// ── 언어별 가이드 링크 ────────────────────────────────────
+
+const GUIDE_LINKS: Record<string, string> = {
+  en: 'https://github.com/kjungw1025/youtube-timestamp-comments/blob/main/README/README.md#api-key-setup',
+  ko: 'https://github.com/kjungw1025/youtube-timestamp-comments/blob/main/README/README-ko_kr.md#api-key-setup',
+  ja: 'https://github.com/kjungw1025/youtube-timestamp-comments/blob/main/README/README-ja_jp.md#api-key-setup',
+  zh: 'https://github.com/kjungw1025/youtube-timestamp-comments/blob/main/README/README-zh_hans.md#api-key-setup',
+};
+
 // ── i18n 적용 ─────────────────────────────────────────────
 
 function applyI18n(apiKeyInput: HTMLInputElement): void {
@@ -110,7 +119,7 @@ function applyI18n(apiKeyInput: HTMLInputElement): void {
   const apiLabel  = document.getElementById('settings-api-label');
   const saveBtn   = document.getElementById('settings-save-btn');
   const guideText = document.getElementById('settings-guide-text');
-  const guideLink = document.getElementById('settings-guide-link');
+  const guideLink = document.getElementById('settings-guide-link') as HTMLAnchorElement | null;
 
   if (mainTitle) mainTitle.textContent = t('options', 'title');
   if (subtitle)  subtitle.textContent  = t('options', 'subtitle');
@@ -121,6 +130,9 @@ function applyI18n(apiKeyInput: HTMLInputElement): void {
     // 텍스트 노드만 업데이트 (icon 요소 보존)
     const textNode = Array.from(guideLink.childNodes).find((n) => n.nodeType === Node.TEXT_NODE);
     if (textNode) textNode.textContent = t('options', 'guideLink') + ' ';
+    // 현재 언어에 맞는 가이드 링크로 업데이트
+    const lang = getCurrentLanguage();
+    guideLink.href = GUIDE_LINKS[lang] ?? GUIDE_LINKS['en'];
   }
 
   apiKeyInput.placeholder = t('options', 'apiKeyPlaceholder');
