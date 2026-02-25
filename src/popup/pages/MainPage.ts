@@ -6,6 +6,13 @@ import { MessageType, ErrorCode } from '../../types/message.types';
 import type { FetchCommentsRequest, FetchCommentsResponse, ErrorResponse } from '../../types/message.types';
 import type { CommentThread, CommentOrder } from '../../types/youtube.types';
 import { hasTimestamp, extractTimestamps, filterCommentsByTimestampRange, timestampToSeconds } from '../../utils/timestamp.util';
+import { getSessionStorageMultiple, setSessionStorage } from '../../utils/storage.util';
+import {
+  SESSION_KEY_COMMENTS,
+  SESSION_KEY_VIDEO_ID,
+  SESSION_KEY_NEXT_PAGE_TOKEN,
+  SESSION_KEY_ORDER,
+} from '../../constants';
 import { Header } from '../components/Header';
 import { TimestampSidebar } from '../components/TimestampSidebar';
 import { TimestampModal } from '../components/TimestampModal';
@@ -237,6 +244,14 @@ async function loadComments(
     nextPageToken = result.nextPageToken;
     displayedComments = allComments;
 
+    // 팝업 재진입 시 복원을 위해 세션에 캐싱
+    void setSessionStorage({
+      [SESSION_KEY_COMMENTS]: allComments,
+      [SESSION_KEY_VIDEO_ID]: currentVideoId,
+      [SESSION_KEY_NEXT_PAGE_TOKEN]: nextPageToken ?? null,
+      [SESSION_KEY_ORDER]: currentOrder,
+    });
+
     header.updateCommentCount(allComments.length, !!nextPageToken);
     rebuildSidebar(sidebar);
     renderComments(displayedComments);
@@ -304,6 +319,31 @@ export async function mountMainPage(root: HTMLElement, videoId: string | null, t
   // 동일 videoId로 재진입 시 (예: 설정 페이지 갔다가 돌아온 경우)
   // 기존 댓글 상태를 그대로 복원해 불필요한 API 재호출 방지
   if (videoId === prevVideoId && allComments.length > 0) {
+    header.updateCommentCount(allComments.length, !!nextPageToken);
+    rebuildSidebar(sidebar);
+    renderComments(displayedComments);
+    return;
+  }
+
+  // 팝업을 닫았다 다시 열었을 때 세션 캐시로 복원
+  type SessionCache = {
+    [SESSION_KEY_COMMENTS]: CommentThread[];
+    [SESSION_KEY_VIDEO_ID]: string;
+    [SESSION_KEY_NEXT_PAGE_TOKEN]: string | null;
+    [SESSION_KEY_ORDER]: CommentOrder;
+  };
+  const cache = await getSessionStorageMultiple<SessionCache>([
+    SESSION_KEY_COMMENTS,
+    SESSION_KEY_VIDEO_ID,
+    SESSION_KEY_NEXT_PAGE_TOKEN,
+    SESSION_KEY_ORDER,
+  ]);
+
+  if (cache[SESSION_KEY_VIDEO_ID] === videoId && cache[SESSION_KEY_COMMENTS]?.length) {
+    allComments = cache[SESSION_KEY_COMMENTS];
+    displayedComments = allComments;
+    nextPageToken = cache[SESSION_KEY_NEXT_PAGE_TOKEN] ?? undefined;
+    currentOrder = cache[SESSION_KEY_ORDER] ?? 'relevance';
     header.updateCommentCount(allComments.length, !!nextPageToken);
     rebuildSidebar(sidebar);
     renderComments(displayedComments);
