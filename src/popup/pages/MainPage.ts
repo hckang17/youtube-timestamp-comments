@@ -6,7 +6,6 @@ import { MessageType, ErrorCode } from '../../types/message.types';
 import type { FetchCommentsRequest, FetchCommentsResponse, ErrorResponse } from '../../types/message.types';
 import type { CommentThread, CommentOrder } from '../../types/youtube.types';
 import { hasTimestamp, extractTimestamps, filterCommentsByTimestampRange } from '../../utils/timestamp.util';
-import { decodeHtmlEntities } from '../../utils/dom.util';
 import { Header } from '../components/Header';
 import { TimestampSidebar } from '../components/TimestampSidebar';
 import { TimestampModal } from '../components/TimestampModal';
@@ -168,7 +167,7 @@ function applyFilter(selectedSeconds: number | null): void {
   displayedComments = selectedSeconds === null
     ? allComments
     : allComments.filter((thread) => {
-        const text = decodeHtmlEntities(thread.snippet.topLevelComment.snippet.textDisplay ?? '');
+        const text = thread.snippet.topLevelComment.snippet.textOriginal ?? '';
         return extractTimestamps(text).includes(selectedSeconds);
       });
   renderComments(displayedComments);
@@ -176,7 +175,7 @@ function applyFilter(selectedSeconds: number | null): void {
 
 function rebuildSidebar(sidebar: TimestampSidebar): void {
   const timestamps = allComments.flatMap((thread) => {
-    const text = decodeHtmlEntities(thread.snippet.topLevelComment.snippet.textDisplay ?? '');
+    const text = thread.snippet.topLevelComment.snippet.textOriginal ?? '';
     return extractTimestamps(text);
   });
   sidebar.render(timestamps);
@@ -231,7 +230,7 @@ async function loadComments(
   try {
     const result = await fetchComments(currentVideoId, order, append ? nextPageToken : undefined);
     const withTs = result.items.filter((thread) =>
-      hasTimestamp(decodeHtmlEntities(thread.snippet.topLevelComment.snippet.textDisplay ?? '')),
+      hasTimestamp(thread.snippet.topLevelComment.snippet.textOriginal ?? ''),
     );
 
     allComments = append ? [...allComments, ...withTs] : withTs;
