@@ -1,6 +1,8 @@
-// chrome.storage.local 래퍼 유틸리티
+// chrome.storage 래퍼 유틸리티
 
 import type { StorageData, StorageKey } from '../types/storage.types';
+
+// ── chrome.storage.local ───────────────────────────────────
 
 /**
  * chrome.storage.local에서 단일 키 값을 조회
@@ -64,4 +66,33 @@ export function removeStorage(key: StorageKey): Promise<void> {
       resolve();
     });
   });
+}
+
+// ── chrome.storage.session ────────────────────────────────
+// 브라우저가 열려 있는 동안만 유지되는 세션 스토리지
+// 팝업을 닫았다 열어도 데이터가 유지됨 (브라우저 종료 시 초기화)
+
+/**
+ * chrome.storage.session에서 값을 조회
+ */
+export async function getSessionStorage<T>(key: string): Promise<T | undefined> {
+  const result = await chrome.storage.session.get(key);
+  return result[key] as T | undefined;
+}
+
+/**
+ * chrome.storage.session에 값을 저장
+ */
+export async function setSessionStorage(data: Record<string, unknown>): Promise<void> {
+  await chrome.storage.session.set(data);
+}
+
+/**
+ * chrome.storage.session에서 여러 키 값을 한 번에 조회
+ */
+export async function getSessionStorageMultiple<T extends Record<string, unknown>>(
+  keys: string[],
+): Promise<Partial<T>> {
+  const result = await chrome.storage.session.get(keys);
+  return result as Partial<T>;
 }

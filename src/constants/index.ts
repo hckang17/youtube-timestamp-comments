@@ -20,6 +20,12 @@ export const STORAGE_KEY_API_KEY = 'apiKey';
 export const STORAGE_KEY_THEME = 'theme';
 export const STORAGE_KEY_LANGUAGE = 'language';
 
+// ── Session 캐시 키 ────────────────────────────────────────
+export const SESSION_KEY_COMMENTS = 'cachedComments';
+export const SESSION_KEY_VIDEO_ID = 'cachedVideoId';
+export const SESSION_KEY_NEXT_PAGE_TOKEN = 'cachedNextPageToken';
+export const SESSION_KEY_ORDER = 'cachedOrder';
+
 // ── 다크모드 ───────────────────────────────────────────────
 export const THEME_DARK = 'dark';
 export const THEME_LIGHT = 'light';
