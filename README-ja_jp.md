@@ -4,7 +4,7 @@
 
 # YouTube Timestamp Comments ![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)
 
-[English]((https://github.com/kjungw1025/youtube-timestamp-comments/tree/main/README.md)) | [한국어](https://github.com/kjungw1025/youtube-timestamp-comments/tree/main/README-ko_kr.md) | 日本語 | [简体中文](https://github.com/kjungw1025/youtube-timestamp-comments/tree/main/README-zh_hans.md)
+[English](https://github.com/kjungw1025/youtube-timestamp-comments/tree/main/README.md) | [한국어](https://github.com/kjungw1025/youtube-timestamp-comments/tree/main/README-ko_kr.md) | 日本語 | [简体中文](https://github.com/kjungw1025/youtube-timestamp-comments/tree/main/README-zh_hans.md)
 
 </div>
 
