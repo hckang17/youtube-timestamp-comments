@@ -10,14 +10,18 @@ import { router } from './router';
 import { mountMainPage } from './pages/MainPage';
 import { mountSettingsPage } from './pages/SettingsPage';
 
-// ── videoId 추출 ──────────────────────────────────────────
+// ── videoId / tabId 추출 ──────────────────────────────────
 
-async function getVideoIdFromTab(): Promise<string | null> {
+async function getTabInfo(): Promise<{ videoId: string | null; tabId: number | null }> {
   return new Promise((resolve) => {
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-      const url = tabs[0]?.url ?? '';
+      const tab = tabs[0];
+      const url = tab?.url ?? '';
       const match = url.match(/[?&]v=([^&]+)/);
-      resolve(match?.[1] ?? null);
+      resolve({
+        videoId: match?.[1] ?? null,
+        tabId: tab?.id ?? null,
+      });
     });
   });
 }
@@ -32,22 +36,22 @@ async function main(): Promise<void> {
   // i18n 초기화
   await initI18n();
 
-  // videoId 사전 추출 (MainPage에서 사용)
-  const videoId = await getVideoIdFromTab();
+  // videoId / tabId 사전 추출
+  const { videoId, tabId } = await getTabInfo();
 
   const root = document.getElementById('root')!;
 
   // 라우트 변경 시 페이지 전환
   router.onRouteChange((route) => {
     if (route === '/') {
-      void mountMainPage(root, videoId);
+      void mountMainPage(root, videoId, tabId);
     } else if (route === '/settings') {
       mountSettingsPage(root);
     }
   });
 
   // 초기 라우트 — 메인 페이지
-  void mountMainPage(root, videoId);
+  void mountMainPage(root, videoId, tabId);
 }
 
 document.addEventListener('DOMContentLoaded', () => { void main(); });

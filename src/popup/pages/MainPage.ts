@@ -5,7 +5,7 @@ import { t } from '../../i18n';
 import { MessageType, ErrorCode } from '../../types/message.types';
 import type { FetchCommentsRequest, FetchCommentsResponse, ErrorResponse } from '../../types/message.types';
 import type { CommentThread, CommentOrder } from '../../types/youtube.types';
-import { hasTimestamp, extractTimestamps, filterCommentsByTimestampRange } from '../../utils/timestamp.util';
+import { hasTimestamp, extractTimestamps, filterCommentsByTimestampRange, timestampToSeconds } from '../../utils/timestamp.util';
 import { Header } from '../components/Header';
 import { TimestampSidebar } from '../components/TimestampSidebar';
 import { TimestampModal } from '../components/TimestampModal';
@@ -249,7 +249,7 @@ async function loadComments(
 
 // ── 마운트 ────────────────────────────────────────────────
 
-export async function mountMainPage(root: HTMLElement, videoId: string | null): Promise<void> {
+export async function mountMainPage(root: HTMLElement, videoId: string | null, tabId: number | null): Promise<void> {
   root.innerHTML = getMainPageHTML();
 
   currentVideoId = videoId;
@@ -275,6 +275,24 @@ export async function mountMainPage(root: HTMLElement, videoId: string | null): 
 
   header.applyI18n();
   modal.applyI18n();
+
+  // 타임스탬프 링크 클릭 → 영상 해당 구간으로 이동 (이벤트 위임)
+  if (tabId !== null) {
+    const listEl = getEl('comment-list');
+    listEl.addEventListener('click', (e) => {
+      const link = (e.target as HTMLElement).closest<HTMLElement>('.comment-ts-link');
+      if (!link) return;
+      e.preventDefault();
+      const ts = link.dataset.timestamp;
+      if (!ts) return;
+      // 콜백을 넘겨 lastError를 소비함으로써 content script 미주입 탭에서의 uncaught 오류 방지
+      chrome.tabs.sendMessage(
+        tabId,
+        { type: 'SEEK_TO', payload: { seconds: timestampToSeconds(ts) } },
+        () => { void chrome.runtime.lastError; },
+      );
+    });
+  }
 
   if (!currentVideoId) {
     showStatus('error', t('popup', 'errorNoVideo'));
