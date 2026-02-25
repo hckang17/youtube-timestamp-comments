@@ -57,6 +57,7 @@ export class Header {
       item.addEventListener('click', () => {
         const order = item.dataset.order as CommentOrder;
         this.sortMenu.classList.remove('open');
+        this.updateSortActive(order);
         this.callbacks.onSortChange(order);
       });
     });
@@ -74,6 +75,14 @@ export class Header {
     });
   }
 
+  // ── 정렬 활성 상태 ──────────────────────────────────────
+
+  updateSortActive(order: CommentOrder): void {
+    this.el.querySelectorAll<HTMLElement>('[data-order]').forEach((item) => {
+      item.classList.toggle('active', item.dataset.order === order);
+    });
+  }
+
   // ── i18n 적용 ────────────────────────────────────────────
 
   applyI18n(): void {
@@ -86,5 +95,8 @@ export class Header {
     if (searchLabel) searchLabel.textContent = t('popup', 'searchByTimestamp');
     if (popularityItem) popularityItem.textContent = t('popup', 'sortPopularity');
     if (latestItem) latestItem.textContent = t('popup', 'sortLatest');
+
+    // 초기 활성 상태 반영 (default: relevance)
+    this.updateSortActive('relevance');
   }
 }

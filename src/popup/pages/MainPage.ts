@@ -348,6 +348,7 @@ export async function mountMainPage(root: HTMLElement, videoId: string | null, t
 
   if (restoredFromCache) {
     header.updateCommentCount(allComments.length, !!nextPageToken);
+    header.updateSortActive(currentOrder);
     rebuildSidebar(sidebar);
     renderComments(displayedComments);
     return;

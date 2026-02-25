@@ -309,6 +309,7 @@ html.dark .sidebar-collapse-trigger:hover { background: rgba(255,255,255,.05); }
   transition: background var(--transition);
 }
 .sort-menu-item:hover { background: var(--bg-hover); }
+.sort-menu-item.active { color: var(--color-primary); font-weight: 600; }
 
 /* ── 다크모드 토글 아이콘 전환 ───────────────────────────── */
 .theme-icon-dark { display: none; }
