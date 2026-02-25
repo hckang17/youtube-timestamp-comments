@@ -252,6 +252,7 @@ async function loadComments(
 export async function mountMainPage(root: HTMLElement, videoId: string | null, tabId: number | null): Promise<void> {
   root.innerHTML = getMainPageHTML();
 
+  const prevVideoId = currentVideoId;
   currentVideoId = videoId;
 
   const headerEl   = getEl('popup-header');
@@ -297,6 +298,15 @@ export async function mountMainPage(root: HTMLElement, videoId: string | null, t
   if (!currentVideoId) {
     showStatus('error', t('popup', 'errorNoVideo'));
     header.updateCommentCount(0, false);
+    return;
+  }
+
+  // 동일 videoId로 재진입 시 (예: 설정 페이지 갔다가 돌아온 경우)
+  // 기존 댓글 상태를 그대로 복원해 불필요한 API 재호출 방지
+  if (videoId === prevVideoId && allComments.length > 0) {
+    header.updateCommentCount(allComments.length, !!nextPageToken);
+    rebuildSidebar(sidebar);
+    renderComments(displayedComments);
     return;
   }
 
