@@ -42,6 +42,18 @@ export function createAvatarImg(src: string, alt: string, extraClass?: string): 
 }
 
 /**
+ * YouTube API의 textDisplay는 HTML 엔티티(&amp;, <br> 등)와 <a> 태그를 포함한다.
+ * 1) <br> → \n 치환 후 DOMParser로 파싱해 textContent를 추출한다.
+ *    (textContent는 <br>을 공백으로 무시하므로 사전 치환이 필요하다)
+ * 2) <a> 태그 안의 텍스트(타임스탬프 등)는 textContent에 그대로 보존된다.
+ */
+export function decodeHtmlEntities(html: string): string {
+  const withLineBreaks = html.replace(/<br\s*\/?>/gi, '\n');
+  const doc = new DOMParser().parseFromString(withLineBreaks, 'text/html');
+  return doc.body.textContent ?? '';
+}
+
+/**
  * 댓글 텍스트 내 타임스탬프를 anchor 링크로 변환한다.
  * 텍스트를 먼저 이스케이프한 후 타임스탬프 패턴만 링크로 교체한다.
  */

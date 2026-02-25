@@ -3,7 +3,7 @@
 
 import { t } from '../../i18n';
 import { formatRelativeTime } from '../../utils/date.util';
-import { escapeHtml, linkifyTimestamps, createAvatarImg } from '../../utils/dom.util';
+import { escapeHtml, linkifyTimestamps, createAvatarImg, decodeHtmlEntities } from '../../utils/dom.util';
 import { MessageType } from '../../types/message.types';
 import type { Comment, CommentThread } from '../../types/youtube.types';
 import type { FetchRepliesRequest, FetchRepliesResponse } from '../../types/message.types';
@@ -24,7 +24,7 @@ function createReplyCard(comment: Comment): HTMLElement {
   const avatarSrc = snippet.authorProfileImageUrl ?? '';
   const authorName = escapeHtml(snippet.authorDisplayName ?? '');
   const publishedAt = formatRelativeTime(snippet.publishedAt);
-  const bodyHtml = linkifyTimestamps(snippet.textDisplay ?? '');
+  const bodyHtml = linkifyTimestamps(decodeHtmlEntities(snippet.textDisplay ?? ''));
   const likeHtml = likeCount > 0
     ? `<span class="comment-like-count">${likeCount >= 1000 ? `${(likeCount / 1000).toFixed(1)}K` : likeCount}</span>`
     : '';

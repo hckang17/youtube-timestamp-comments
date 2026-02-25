@@ -54,10 +54,6 @@ export function getMainPageHTML(): string {
             <button id="settings-btn" class="header-btn header-btn-icon" title="Settings">
               <span class="material-icons">settings</span>
             </button>
-            <button id="theme-btn" class="header-btn header-btn-icon" title="Toggle dark mode">
-              <span class="material-icons theme-icon-light">dark_mode</span>
-              <span class="material-icons theme-icon-dark">light_mode</span>
-            </button>
           </div>
         </header>
 
@@ -171,7 +167,7 @@ function applyFilter(selectedSeconds: number | null): void {
   displayedComments = selectedSeconds === null
     ? allComments
     : allComments.filter((thread) => {
-        const text = thread.snippet.topLevelComment.snippet.textDisplay ?? '';
+        const text = thread.snippet.topLevelComment.snippet.textOriginal ?? '';
         return extractTimestamps(text).includes(selectedSeconds);
       });
   renderComments(displayedComments);
@@ -179,7 +175,7 @@ function applyFilter(selectedSeconds: number | null): void {
 
 function rebuildSidebar(sidebar: TimestampSidebar): void {
   const timestamps = allComments.flatMap((thread) => {
-    const text = thread.snippet.topLevelComment.snippet.textDisplay ?? '';
+    const text = thread.snippet.topLevelComment.snippet.textOriginal ?? '';
     return extractTimestamps(text);
   });
   sidebar.render(timestamps);
@@ -234,7 +230,7 @@ async function loadComments(
   try {
     const result = await fetchComments(currentVideoId, order, append ? nextPageToken : undefined);
     const withTs = result.items.filter((thread) =>
-      hasTimestamp(thread.snippet.topLevelComment.snippet.textDisplay ?? ''),
+      hasTimestamp(thread.snippet.topLevelComment.snippet.textOriginal ?? ''),
     );
 
     allComments = append ? [...allComments, ...withTs] : withTs;
