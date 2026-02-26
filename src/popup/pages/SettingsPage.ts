@@ -105,10 +105,10 @@ function getEl<T extends HTMLElement>(id: string): T {
 // ── 언어별 가이드 링크 ────────────────────────────────────
 
 const GUIDE_LINKS: Record<string, string> = {
-  en: 'https://github.com/kjungw1025/youtube-timestamp-comments/blob/main/README/README.md#api-key-setup',
-  ko: 'https://github.com/kjungw1025/youtube-timestamp-comments/blob/main/README/README-ko_kr.md#api-key-setup',
-  ja: 'https://github.com/kjungw1025/youtube-timestamp-comments/blob/main/README/README-ja_jp.md#api-key-setup',
-  zh: 'https://github.com/kjungw1025/youtube-timestamp-comments/blob/main/README/README-zh_hans.md#api-key-setup',
+  en: 'https://github.com/kjungw1025/youtube-timestamp-comments/blob/main/README.md#api-key-setup',
+  ko: 'https://github.com/kjungw1025/youtube-timestamp-comments/blob/main/README-ko_kr.md#api-key-setup',
+  ja: 'https://github.com/kjungw1025/youtube-timestamp-comments/blob/main/README-ja_jp.md#api-key-setup',
+  zh: 'https://github.com/kjungw1025/youtube-timestamp-comments/blob/main/README-zh_hans.md#api-key-setup',
 };
 
 // ── i18n 적용 ─────────────────────────────────────────────
