@@ -14,6 +14,8 @@ It was inconvenient to repeatedly scroll through comments to find reactions for 
 
 To solve this inconvenience, I built a simple Chrome extension for browsing YouTube comments by timestamp.
 
+Through this, you can quickly explore various reactions from other users and enjoy YouTube in a more immersive way.
+
 Key Features
 - View comment list based on timestamps
 - Sort timestamps by latest or most popular
