@@ -1,0 +1,43 @@
+{
+  "language": {
+    "label": "언어",
+    "en": "English",
+    "ko": "한국어",
+    "ja": "日本語",
+    "zh": "中文"
+  },
+  "options": {
+    "title": "YouTube Timestamp Comments",
+    "subtitle": "타임스탬프 기반 노트로 시청 경험을 향상시키세요.",
+    "apiKeyLabel": "API 키",
+    "apiKeyPlaceholder": "API 키를 입력하세요",
+    "setupButton": "설정 완료",
+    "guideText": "API Key를 찾는 데 도움이 필요하신가요?",
+    "guideLink": "가이드 보기",
+    "savedMessage": "API 키가 저장되었습니다!",
+    "errorEmptyKey": "API 키를 입력해주세요."
+  },
+  "popup": {
+    "commentCount": "댓글",
+    "more": "더보기",
+    "sortBy": "정렬",
+    "sortPopularity": "인기순",
+    "sortLatest": "최신순",
+    "searchByTimestamp": "타임스탬프로 검색",
+    "settings": "설정",
+    "replies": "답글",
+    "reply": "답글",
+    "showReplies": "답글 {{count}}개",
+    "hideReplies": "답글 숨기기",
+    "noComments": "타임스탬프가 포함된 댓글이 없습니다.",
+    "loading": "댓글을 불러오는 중...",
+    "errorNoVideo": "YouTube 동영상을 감지하지 못했습니다.",
+    "errorNoApiKey": "API 키가 설정되지 않았습니다. 설정으로 이동해주세요.",
+    "errorFetch": "댓글을 불러오지 못했습니다. 다시 시도해주세요."
+  },
+  "modal": {
+    "title": "타임스탬프를 입력하세요",
+    "searchButton": "검색",
+    "rangeLabel": "±"
+  }
+}

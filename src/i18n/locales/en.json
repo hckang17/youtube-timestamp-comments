@@ -1,0 +1,43 @@
+{
+  "language": {
+    "label": "Language",
+    "en": "English",
+    "ko": "한국어",
+    "ja": "日本語",
+    "zh": "中文"
+  },
+  "options": {
+    "title": "YouTube Timestamp Comments",
+    "subtitle": "Enhance your viewing experience with timestamped notes.",
+    "apiKeyLabel": "API Key",
+    "apiKeyPlaceholder": "Enter your API Key here",
+    "setupButton": "Set up",
+    "guideText": "Need help finding your API Key?",
+    "guideLink": "Read the guide",
+    "savedMessage": "API Key saved successfully!",
+    "errorEmptyKey": "Please enter an API Key."
+  },
+  "popup": {
+    "commentCount": "Comment",
+    "more": "more",
+    "sortBy": "Sort by",
+    "sortPopularity": "Popularity",
+    "sortLatest": "Latest",
+    "searchByTimestamp": "Search by timestamp",
+    "settings": "Settings",
+    "replies": "Replies",
+    "reply": "Reply",
+    "showReplies": "{{count}} Replies",
+    "hideReplies": "Hide Replies",
+    "noComments": "No timestamped comments found.",
+    "loading": "Loading comments...",
+    "errorNoVideo": "No YouTube video detected.",
+    "errorNoApiKey": "API Key is not set. Please go to Settings.",
+    "errorFetch": "Failed to fetch comments. Please try again."
+  },
+  "modal": {
+    "title": "Please enter a timestamp",
+    "searchButton": "Search",
+    "rangeLabel": "±"
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "language": {
+    "label": "言語",
+    "en": "English",
+    "ko": "한국어",
+    "ja": "日本語",
+    "zh": "中文"
+  },
+  "options": {
+    "title": "YouTube Timestamp Comments",
+    "subtitle": "タイムスタンプ付きのコメントで視聴体験を向上させましょう。",
+    "apiKeyLabel": "APIキー",
+    "apiKeyPlaceholder": "APIキーを入力してください",
+    "setupButton": "設定完了",
+    "guideText": "APIキーの取得方法がわからない場合は",
+    "guideLink": "ガイドを読む",
+    "savedMessage": "APIキーが保存されました！",
+    "errorEmptyKey": "APIキーを入力してください。"
+  },
+  "popup": {
+    "commentCount": "コメント",
+    "more": "もっと見る",
+    "sortBy": "並び替え",
+    "sortPopularity": "人気順",
+    "sortLatest": "新着順",
+    "searchByTimestamp": "タイムスタンプで検索",
+    "settings": "設定",
+    "replies": "返信",
+    "reply": "返信",
+    "showReplies": "返信 {{count}}件",
+    "hideReplies": "返信を隠す",
+    "noComments": "タイムスタンプを含むコメントが見つかりません。",
+    "loading": "コメントを読み込み中...",
+    "errorNoVideo": "YouTube動画が検出されませんでした。",
+    "errorNoApiKey": "APIキーが設定されていません。設定に移動してください。",
+    "errorFetch": "コメントの取得に失敗しました。もう一度お試しください。"
+  },
+  "modal": {
+    "title": "タイムスタンプを入力してください",
+    "searchButton": "検索",
+    "rangeLabel": "±"
+  }
+}

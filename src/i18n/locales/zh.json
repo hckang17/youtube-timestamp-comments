@@ -1,0 +1,43 @@
+{
+  "language": {
+    "label": "语言",
+    "en": "English",
+    "ko": "한국어",
+    "ja": "日本語",
+    "zh": "中文"
+  },
+  "options": {
+    "title": "YouTube Timestamp Comments",
+    "subtitle": "通过带时间戳的评论提升您的观看体验。",
+    "apiKeyLabel": "API 密钥",
+    "apiKeyPlaceholder": "请输入您的 API 密钥",
+    "setupButton": "完成设置",
+    "guideText": "不知道如何获取 API 密钥？",
+    "guideLink": "查看指南",
+    "savedMessage": "API 密钥已成功保存！",
+    "errorEmptyKey": "请输入 API 密钥。"
+  },
+  "popup": {
+    "commentCount": "评论",
+    "more": "更多",
+    "sortBy": "排序",
+    "sortPopularity": "热门",
+    "sortLatest": "最新",
+    "searchByTimestamp": "按时间戳搜索",
+    "settings": "设置",
+    "replies": "回复",
+    "reply": "回复",
+    "showReplies": "{{count}} 条回复",
+    "hideReplies": "隐藏回复",
+    "noComments": "未找到包含时间戳的评论。",
+    "loading": "正在加载评论...",
+    "errorNoVideo": "未检测到 YouTube 视频。",
+    "errorNoApiKey": "未设置 API 密钥，请前往设置。",
+    "errorFetch": "获取评论失败，请重试。"
+  },
+  "modal": {
+    "title": "请输入时间戳",
+    "searchButton": "搜索",
+    "rangeLabel": "±"
+  }
+}
