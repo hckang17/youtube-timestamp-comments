@@ -12,8 +12,8 @@
     "apiKeyLabel": "APIキー",
     "apiKeyPlaceholder": "APIキーを入力してください",
     "setupButton": "設定完了",
-    "guideText": "APIキーの取得方法がわからない場合は",
-    "guideLink": "ガイドを読む",
+    "guideText": "APIキーの取得方法でお困りですか？",
+    "guideLink": "こちらのガイドをご確認ください。",
     "savedMessage": "APIキーが保存されました！",
     "errorEmptyKey": "APIキーを入力してください。"
   },
@@ -29,11 +29,11 @@
     "reply": "返信",
     "showReplies": "返信 {{count}}件",
     "hideReplies": "返信を隠す",
-    "noComments": "タイムスタンプを含むコメントが見つかりません。",
-    "loading": "コメントを読み込み中...",
-    "errorNoVideo": "YouTube動画が検出されませんでした。",
-    "errorNoApiKey": "APIキーが設定されていません。設定に移動してください。",
-    "errorFetch": "コメントの取得に失敗しました。もう一度お試しください。"
+    "noComments": "タイムスタンプを含むコメントが見つかりませんでした。",
+    "loading": "コメント読み込み中...",
+    "errorNoVideo": "YouTube動画が見つかりませんでした。",
+    "errorNoApiKey": "APIキーが設定されていません。設定画面でAPIキーを入力してください。",
+    "errorFetch": "コメントを取得できませんでした。もう一度お試しください。"
   },
   "modal": {
     "title": "タイムスタンプを入力してください",
